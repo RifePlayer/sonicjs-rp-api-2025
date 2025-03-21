@@ -13,6 +13,8 @@ const { user } = Astro.locals;
 const fullName = `${user.firstName} ${user.lastName}`;
 
 import { apiConfig, type ApiConfig } from "db/routes";
+console.log('apiConfig', apiConfig)
+
 import AdminLayout from "./layouts/admin-layout.astro";
 import { getTableCounts } from "@services/d1-data";
 
