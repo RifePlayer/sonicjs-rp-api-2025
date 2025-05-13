@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "fd55772a-df1f-4f61-8b86-826ec29bc08b",
-  "prevId": "55960a79-2c24-44ef-aae1-d5fd67d24442",
+  "id": "a1e03c26-2c85-4969-ad90-fe08aca570eb",
+  "prevId": "fd55772a-df1f-4f61-8b86-826ec29bc08b",
   "tables": {
     "cacheRequests": {
       "name": "cacheRequests",
@@ -592,6 +592,20 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "passwordOTP": {
+          "name": "passwordOTP",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "passwordOTPExpiresOn": {
+          "name": "passwordOTPExpiresOn",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "role": {

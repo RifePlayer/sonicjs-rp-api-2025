@@ -23,7 +23,6 @@ import {
   updateD1Data,
 } from "./d1-data";
 import { log, timerLog } from "../services/logger";
-import { uuid } from "./utils";
 
 // export async function getRecordOld(d1, kv, id) {
 //   const cacheKey = addCachePrefix(id);
@@ -49,7 +48,9 @@ export async function getRecords(
   cacheKey,
   source = "fastest",
   customDataFunction = undefined
-): Promise<{ data: any; source: string; total: number; contentType?: any }> {
+): Promise<{
+  executionTime: number; data: any; source: string; total: number; contentType?: any 
+}> {
   log(context, { level: "verbose", message: "getRecords start " + cacheKey });
 
   //   const disableCache = context.env.disable_cache === 'true';
@@ -228,7 +229,7 @@ export async function getRecords(
   //   }
 
   log(context, { level: "verbose", message: "getRecords end", cacheKey });
-  return { data: d1Data, source: "d1", total };
+  return { data: d1Data, source: "d1", total, executionTime: 0 };
 }
 
 async function dataAddToInMemoryCache(

@@ -1,37 +1,35 @@
+const commonHeaders = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Max-Age": "86400", // 24 hours
+};
+
 export const return200 = (data = {}) => {
-  return new Response(
-    JSON.stringify({
-      data,
-    }),
-    { status: 200 }
-  );
+
+  return new Response(JSON.stringify(data), {
+    headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Max-Age': '86400', // 24 hours
+    },
+    status: 200,
+});
+
+  // return new Response(JSON.stringify(data), {
+  //   headers: { ...commonHeaders },
+  //   status: 200,
+  // });
 };
 
-export const return200WithObject = (object) => {
-  return new Response(
-    JSON.stringify(
-      object,
-    ),
-    { status: 200 }
-  );
-};
-
-export const return201 = (message = "Record Created") => {
-  return new Response(
-    JSON.stringify({
-      message,
-    }),
-    { status: 201 }
-  );
-};
-
-export const return204 = (message = "Record Deleted") => {
-  return new Response(
-    JSON.stringify({
-      message,
-    }),
-    { status: 201 }
-  );
+export const return201 = (data) => {
+  return new Response(JSON.stringify(data), {
+    headers: commonHeaders,
+    status: 201,
+  });
 };
 
 export const return400 = (message = "Unauthorized") => {
@@ -39,7 +37,7 @@ export const return400 = (message = "Unauthorized") => {
     JSON.stringify({
       message,
     }),
-    { status: 400 }
+    { headers: commonHeaders, status: 400 }
   );
 };
 
@@ -48,7 +46,7 @@ export const return401 = (message = "Unauthorized") => {
     JSON.stringify({
       message,
     }),
-    { status: 401 }
+    { headers: commonHeaders, status: 401 }
   );
 };
 
@@ -57,7 +55,7 @@ export const return404 = (message = "Not Found") => {
     JSON.stringify({
       message,
     }),
-    { status: 404 }
+    { headers: commonHeaders, status: 404 }
   );
 };
 
@@ -66,6 +64,6 @@ export const return500 = (message = "Internal Server Error") => {
     JSON.stringify({
       message,
     }),
-    { status: 500 }
+    { headers: commonHeaders, status: 500 }
   );
 };
