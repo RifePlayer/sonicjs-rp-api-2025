@@ -7,6 +7,7 @@ import * as contacts from "@custom/db/schema/contacts";
 import * as faqs from "@custom/db/schema/faqs";
 import * as programs from "@custom/db/schema/programs";
 
+
 export const tableSchemas = {
     posts,
     comments,
