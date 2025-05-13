@@ -3,6 +3,9 @@ import * as comments from "@custom/db/schema/comments";
 import * as categories from "@custom/db/schema/categories";
 import * as categoriesToPosts from "@custom/db/schema/categoriesToPosts";
 import * as employees from "@custom/db/schema/employees";
+import * as contacts from "@custom/db/schema/contacts";
+import * as faqs from "@custom/db/schema/faqs";
+import * as programs from "@custom/db/schema/programs";
 
 export const tableSchemas = {
     posts,
@@ -14,6 +17,9 @@ export const tableSchemas = {
     userSessions, // Core table schema DO NOT REMOVE
     cacheRequests, // Core table schema DO NOT REMOVE
     cacheStats, // Core table schema DO NOT REMOVE
+    contacts,
+    faqs,
+    programs
 };
 
 // Export all constants from posts
@@ -43,6 +49,21 @@ export const {
 export const {
     table: employeesTable,
 } = employees;
+
+// Export all constants from contacts
+export const {
+    table: contactsTable,
+} = contacts;
+
+// Export all constants from faqs
+export const {
+    table: faqsTable,
+} = faqs;
+
+// Export all constants from programs
+export const {
+    table: programsTable,
+} = programs;
 
 // Core table schemas DO NOT EDIT BELOW THIS LINE
 
