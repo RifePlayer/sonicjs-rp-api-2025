@@ -1,10 +1,13 @@
+// node src/custom/db/migrate/migrate.js >  ./src/custom/db/migrate/import.sql
+//   npx wrangler d1 execute sonicjs --file ./src/custom/db/migrate/import.sql
 
+//   wrangler d1 execute sonicjs --local --file ./src/custom/import.sql
 
 import { readFileSync } from 'fs';
 const programs = JSON.parse(readFileSync('./src/custom/db/migrate/rife-data.json'));
 
 function migrate() {
-  const testPrograms = programs.slice(0, 3);
+  const testPrograms = programs.slice(0, 9999);
 
   console.log("delete from programs;");
 
