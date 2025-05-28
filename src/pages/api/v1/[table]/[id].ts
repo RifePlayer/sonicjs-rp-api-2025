@@ -265,11 +265,17 @@ export const DELETE: APIRoute = async (context) => {
       id,
       table: tableName,
     });
-    // if (entry?.hooks?.afterOperation) {
-    //   await entry.hooks.afterOperation(context, 'delete', id, record, result);
-    // }
+    if (entry?.hooks?.afterOperation) {
+      await entry.hooks.afterOperation(context, 'delete', id, record, result);
+    }
 
-    return return200({ data: record.data });
+    if(result === true){
+      return return200({ success: true, id });
+    } else if (typeof result === 'object' && 'message' in result) {
+      return return500(result.message);
+    } else {
+      return return500('Delete operation failed');
+    }
   } else {
     console.log("content not found");
     return return404();

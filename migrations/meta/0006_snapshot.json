@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "79b3bbbe-4a2d-4265-b6ed-93a34aff3fdc",
+  "id": "36b6b1db-2536-49fc-85bd-6c4940d6ec55",
   "prevId": "a1e03c26-2c85-4969-ad90-fe08aca570eb",
   "tables": {
     "cacheRequests": {
@@ -297,6 +297,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+<<<<<<< HEAD
     "contacts": {
       "name": "contacts",
       "columns": {
@@ -369,6 +370,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+=======
+>>>>>>> cdb5022796d3c7d82db4d0ee1ec3946d3cd9fd67
     "employees": {
       "name": "employees",
       "columns": {
@@ -476,6 +479,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+<<<<<<< HEAD
     "faqs": {
       "name": "faqs",
       "columns": {
@@ -528,6 +532,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+=======
+>>>>>>> cdb5022796d3c7d82db4d0ee1ec3946d3cd9fd67
     "posts": {
       "name": "posts",
       "columns": {
@@ -608,6 +614,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+<<<<<<< HEAD
     "programs": {
       "name": "programs",
       "columns": {
@@ -709,6 +716,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+=======
+>>>>>>> cdb5022796d3c7d82db4d0ee1ec3946d3cd9fd67
     "userSessions": {
       "name": "userSessions",
       "columns": {
@@ -812,6 +821,23 @@
           "notNull": false,
           "autoincrement": false
         },
+<<<<<<< HEAD
+=======
+        "emailConfirmedOn": {
+          "name": "emailConfirmedOn",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "emailConfirmationToken": {
+          "name": "emailConfirmationToken",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+>>>>>>> cdb5022796d3c7d82db4d0ee1ec3946d3cd9fd67
         "password": {
           "name": "password",
           "type": "text",
