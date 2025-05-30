@@ -8,5 +8,12 @@ export async function GET(context) {
     return return500({ error: result.error });
   }
 
-  return context.redirect(context.locals.runtime.env.EMAIL_CONFIRMATION_REDIRECT_URL);
+  const redirectUrl = context.locals.runtime.env.EMAIL_CONFIRMATION_REDIRECT_URL;
+
+  if (redirectUrl) {
+    return context.redirect(redirectUrl);
+  }
+
+  
+  return return200({ message: "Email confirmed" });
 }
