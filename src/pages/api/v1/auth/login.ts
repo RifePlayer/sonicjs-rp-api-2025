@@ -21,12 +21,13 @@ export const POST: APIRoute = async (context) => {
       password,
       otp,
       context
-    ) as { bearer: string; expires: string, error?: string };
+    ) as { user: any, bearer: string; expires: string, error?: string };
 
     if (loginResult.error) {
       return return401(loginResult.error);
     } else {
       return return200({
+        user: loginResult.user,
         bearer: loginResult.bearer,
         expires: loginResult.expires,
       });

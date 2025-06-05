@@ -184,7 +184,15 @@ test.describe("Register API Tests", () => {
     expect(response4.status()).toBe(200);
     const { data: userDataAfterConfirmation } = await response4.json();
     expect(userDataAfterConfirmation.emailConfirmedOn).not.toBeNull();
+    expect(userDataAfterConfirmation.emailConfirmationToken).toBeNull();
+
+    // now if the link is clicked again, it should return 404
+    const response5 = await request.get(
+      `/api/v1/auth/email-confirmation/receive/${userData.emailConfirmationToken}`
+    );
+    expect(response5.status()).toBe(404);
   });
+  
 
   test("should not allow duplicate email to register", async ({ request }) => {
     await updateEnvVar(request, "USERS_CAN_REGISTER", "true");

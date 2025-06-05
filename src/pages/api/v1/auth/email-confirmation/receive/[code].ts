@@ -1,11 +1,11 @@
 import { confirmEmail, doesEmailExist, getLoginTokenAndSession, login, sendEmailConfirmation } from "@services/auth";
-import { return200, return500 } from "@services/return-types";
+import { return200, return404, return500 } from "@services/return-types";
 
 export async function GET(context) {
   const code = context.params.code;
   const result = await confirmEmail(context, code);
-  if (result.error) {
-    return return500({ error: result.error });
+  if (!result.success) {
+    return return404(result.message );
   }
 
   const redirectUrl = context.locals.runtime.env.EMAIL_CONFIRMATION_REDIRECT_URL;

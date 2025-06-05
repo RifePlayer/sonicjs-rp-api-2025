@@ -84,11 +84,13 @@ export async function sendPasswordResetEmail(context, user, code, expirationTime
 
 export async function sendEmailConfirmationEmail(context, user, code) {
   const resend = getResendClient(context);
+  const baseUrl = context.locals.runtime.env.EMAIL_BASE_URL;
+  const appUrl = context.locals.runtime.env.EMAIL_CONFIRMATION_APP_URL?.replace("{code}", code);
   const result = await resend.emails.send({
     from: context.locals.runtime.env.EMAIL_FROM,
     to: user.email,
     subject: context.locals.runtime.env.EMAIL_CONFIRMATION_SUBJECT,
-    react: ConfirmationEmail(user, code, context.locals.runtime.env.EMAIL_BASE_URL),
+    react: ConfirmationEmail(user, code, baseUrl, appUrl),
   });
   return result;
 }

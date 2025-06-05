@@ -10,7 +10,7 @@ export const hooks: AstroIntegration = {
     'astro:server:start': (options) => {
 //     const hideStartupLogo = import.meta.env.HIDE_STARTUP_LOGO?.toString().toLowerCase() === "true";
 //     console.log('hideStartupLogo', hideStartupLogo);
-// if (hideStartupLogo !== true) {
+if (false) {
     console.log("\nWelcome to ...");
 
 
@@ -41,6 +41,6 @@ export const hooks: AstroIntegration = {
     console.log("\n");
     console.log("The World's Fastest API Framework!\n");
     }
-// }
+}
   }
 }; 

@@ -2,6 +2,7 @@ import { sendOTPEmail } from "@services/email";
 import { return200, return404 } from "@services/return-types";
 import { getRecords, updateRecord } from "@services/data";
 import { formatMilliseconds } from "@services/time";
+import { getUserFromEmail } from "@services/auth";
 
 export const GET = async (context) => {
   let params = context.params;
@@ -11,25 +12,11 @@ export const GET = async (context) => {
 
   const otp = generateOTPPassword(context.locals.runtime.env.ONE_TIME_PASSWORD_CHARACTER_LENGTH ?? 8);
 
-  const userRecord = await getRecords(
-    context,
-    "users", // table name
-    {
-      filters: {
-        email: {
-          $eq: email, // the email address you want to look up
-        },
-      },
-    },
-    `user-lookup-${email}`, // cache key
-    "fastest"
-  );
+  const user = await getUserFromEmail(email, context);
 
-  if (!userRecord.data.length) {
+  if (!user) {
     return return404();
   }
-
-  const user = userRecord.data[0];
 
   const now = new Date();
 

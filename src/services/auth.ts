@@ -3,13 +3,14 @@ import {
   generateSessionToken,
   invalidateUserSessions,
 } from "./sessions";
-import { eq } from "drizzle-orm";
+import { eq, like } from "drizzle-orm";
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
 import { table as userTable } from "@schema/users";
 import { compareStringToHash } from "./cyrpt";
 import { getRecords, updateRecord } from "./data";
 import { sendEmailConfirmationEmail } from "./email";
 import { generateRandomString } from "./utils";
+import { return404 } from "./return-types";
 
 export const login = async (
   d1,
@@ -23,7 +24,7 @@ export const login = async (
   const record = await db
     .select()
     .from(userTable)
-    .where(eq(userTable.email, email));
+    .where(like(userTable.email, email));
   const user = record[0];
 
   let userPassword = user?.password;
@@ -83,7 +84,7 @@ export const login = async (
 
   if (isPasswordCorrect || isOTPCorrect) {
     const { token, session } = await getLoginTokenAndSession(user.id as string, context);
-    return { bearer: token, expires: session.activeExpires };
+    return { user, bearer: token, expires: session.activeExpires };
   } else {
     console.log("login failed, password incorrect for ", user.email);
     return { error };
@@ -107,7 +108,7 @@ export const getLoginTokenAndSession = async (userId: string, context: any) => {
 
 export const getUserFromEmail = async (email: string, context: any) => {
   const db = drizzle(context.locals.runtime.env.D1);
-  const user = await db.select().from(userTable).where(eq(userTable.email, email)); 
+  const user = await db.select().from(userTable).where(like(userTable.email, `%${email}%`)); 
   return user[0] ?? null;
 };
 
@@ -198,13 +199,13 @@ export const sendEmailConfirmation = async (context, email: string) => {
 };
 
 export const confirmEmail = async (context, code: string) => {
-  const db = drizzle(context.locals.runtime.env.D1);
+  const db = drizzle(context.locals.runtime.env.D1); 
   const userRecord = await getRecords(context, "users", {
     filters: { emailConfirmationToken: { $eq: code } },
   });
   const user = userRecord.data[0];
   if (!user) {
-    return { error: "User not found" };
+    return { success: false, message: "Code not valid or already used" };
   }
   const updated = await updateRecord(
     context.locals.runtime.env.D1,
@@ -212,9 +213,9 @@ export const confirmEmail = async (context, code: string) => {
     {
       table: "users",
       id: user.id,
-      data: { emailConfirmedOn: new Date().getTime() },
+      data: { emailConfirmedOn: new Date().getTime(), emailConfirmationToken: null },
     },
     {}
   );
-  return { success: "Email confirmed", user };
+  return { success: true, message: "Email confirmed", user };
 };
