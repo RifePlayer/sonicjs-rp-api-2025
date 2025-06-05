@@ -10,6 +10,7 @@ import {
 import { sha256 } from "@oslojs/crypto/sha2";
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
 import { tableSchemas } from "@custom/custom.config";
+import { cleanUser } from "@services/auth";
 
 // import type { User, Session } from "./db.js";
 
@@ -89,7 +90,7 @@ export async function validateSessionToken(
       })
       .where(eq(userSessions.id, sessionWithToken.id));
   }
-  return { session: sessionWithToken, user };
+  return { session: sessionWithToken, user: cleanUser(user) };
 }
 
 export async function invalidateSession(

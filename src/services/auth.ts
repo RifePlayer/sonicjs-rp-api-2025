@@ -84,7 +84,7 @@ export const login = async (
 
   if (isPasswordCorrect || isOTPCorrect) {
     const { token, session } = await getLoginTokenAndSession(user.id as string, context);
-    return { user, bearer: token, expires: session.activeExpires };
+    return { user: cleanUser(user), bearer: token, expires: session.activeExpires };
   } else {
     console.log("login failed, password incorrect for ", user.email);
     return { error };
@@ -192,7 +192,7 @@ export const sendEmailConfirmation = async (context, email: string) => {
 
     return await sendEmailConfirmationEmail(
       context,
-      user,
+      cleanUser(user),
       emailConfirmationToken
     );
   }
@@ -217,5 +217,17 @@ export const confirmEmail = async (context, code: string) => {
     },
     {}
   );
-  return { success: true, message: "Email confirmed", user };
+  return { success: true, message: "Email confirmed", user: cleanUser(user) };
+};
+
+export const cleanUser = (user: any) => {
+  return {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    role: user.role,
+    profile: user.profile,
+    confirmed: user.emailConfirmedOn > 0,
+  };
 };

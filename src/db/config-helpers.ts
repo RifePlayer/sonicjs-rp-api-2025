@@ -20,7 +20,7 @@ export function isAdmin(context: AppContext) {
 
 export function isUser(context: AppContext, id: string) {
   const user = context.locals.user;
-  return user?.userId === id;
+  return user?.id === id;
 }
 
 export function isAdminOrUser(context: AppContext, id: string) {
