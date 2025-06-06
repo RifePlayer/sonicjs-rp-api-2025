@@ -26,8 +26,14 @@ import { validateSessionToken } from "@services/sessions";
 import { checkToken } from "@services/token";
 import { cacheRequestInsert } from "@services/kv-data";
 
-export const GET: APIRoute = async (context) => {
+export const OPTIONS: APIRoute = async (context) => {
+  console.log("OPTIONS");
   
+  return return200();
+}
+
+export const GET: APIRoute = async (context) => {
+  console.log("GET");
   const start = Date.now();
   let params: {
     table?: string;
