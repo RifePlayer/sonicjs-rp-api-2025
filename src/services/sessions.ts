@@ -113,5 +113,5 @@ export async function invalidateUserSessions(
 }
 
 export type SessionValidationResult =
-  | { session: Session; user: User }
+  | { session: Session; user: any }
   | { session: null; user: null };
