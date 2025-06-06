@@ -17,7 +17,7 @@ function migrate() {
     user.profile = {plan: user.plan};
 
     const sql = `insert into users(id, firstName, lastName, email, password, role, createdOn, updatedOn, profile)
-    values ('${id}','${user.firstName}','${user.lastName}','test--${user.email}','${user.password}','${user.role}','${user.createdOn}','${user.updatedOn}','${JSON.stringify(user.profile)}');`;
+    values ('${id}','${user.firstName}','${user.lastName}','${user.email}','${user.password}','${user.role}','${user.createdOn}','${user.updatedOn}','${JSON.stringify(user.profile)}');`;
 
     console.log(sql);
     ``;
