@@ -11,7 +11,7 @@ export const anchor = {
   };
   
 export const button = {
-    backgroundColor: '#656ee8',
+    backgroundColor: '#2663EB',
     borderRadius: '5px',
     color: '#fff',
     fontSize: '24px',

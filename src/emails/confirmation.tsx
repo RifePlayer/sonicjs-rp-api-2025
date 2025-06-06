@@ -17,9 +17,9 @@ export const ConfirmationEmail = ( user, code, baseUrl, appUrl) => (
       Confirm Email Address
     </Button>
     <Text style={paragraph}>
-      Your email will be confirmed now by clicking the link above.
+      Your email will be confirmed now by clicking the link above. We take your security seriously and this link is unique to your account and can only be used once.
     </Text>
-    <Text style={paragraph}>— The SonicJs team</Text>
+    <Text style={paragraph}>— The RifePlayer Team</Text>
   </EmailLayout>
 );
 

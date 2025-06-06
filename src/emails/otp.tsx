@@ -16,7 +16,7 @@ export const OTPEmail= ( data ) => (
       Didn't request this? Please ignore this email.
     </Text>
     <hr style={hr} />
-    <Text style={paragraph}>— The SonicJs team</Text>
+    <Text style={paragraph}>— The RifePlayer Team</Text>
   </EmailLayout>
 );
 
@@ -35,7 +35,7 @@ const otp = {
   fontSize: "46px",
   lineHeight: "48px",
   textAlign: "center" as const,
-  backgroundColor: "#656ee8",
+  backgroundColor: "#2663EB",
   padding: "40px",
   margin: "60px",
   borderRadius: "5px",
@@ -50,7 +50,7 @@ const hr = {
 };
 
 const button = {
-  backgroundColor: "#656ee8",
+  backgroundColor: "#2663EB",
   borderRadius: "5px",
   color: "#fff",
   fontSize: "16px",
