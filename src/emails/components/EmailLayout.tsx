@@ -25,7 +25,7 @@ export const EmailLayout = ({ preview, children, baseUrl }: EmailLayoutProps) =>
       <Container style={container}>
           <Section style={box}>
             <Img
-              src="https://rifeplayer.com/images/rife-player-logo.jpg"
+              src="https://api.rifeplayer.com/images/rife-player-logo.jpg"
               width="300"
               alt="RifePlayer"
             />
