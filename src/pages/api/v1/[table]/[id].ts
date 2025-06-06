@@ -29,6 +29,12 @@ import {
 } from "../../../../services/return-types";
 import { checkToken } from "@services/token";
 
+export const OPTIONS: APIRoute = async (context) => {
+  console.log("OPTIONS");
+  
+  return return200();
+}
+
 //get single record
 export const GET = async (context) => {
   const start = Date.now();
