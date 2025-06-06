@@ -8,6 +8,13 @@ import {
 import { invalidateSession } from "@services/sessions";
 import type { APIRoute } from "astro";
 
+
+export const OPTIONS: APIRoute = async (context) => {
+  console.log("OPTIONS");
+  
+  return return200();
+}
+
 export const POST: APIRoute = async (context) => {
   const contentType = context.request.headers.get("content-type");
   if (context.request.headers.get("content-type") === "application/json") {

@@ -5,6 +5,13 @@ import {
 import { validateSessionToken } from "@services/sessions";
 import type { APIRoute } from "astro";
 
+export const OPTIONS: APIRoute = async (context) => {
+  console.log("OPTIONS");
+  
+  return return200();
+}
+
+
 export const GET: APIRoute = async (context) => {
   var token = context.request.headers.get("Authorization");
 
