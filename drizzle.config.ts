@@ -11,8 +11,8 @@ export default LOCAL_DB_PATH
 			schema: "./src/custom/custom.config.ts",
 			dialect: "sqlite",
 			dbCredentials: {
-				url: LOCAL_DB_PATH,
-			},
+				url: LOCAL_DB_PATH
+			}
 		} satisfies Config)
 	: ({
 			schema: "./src/custom/custom.config.ts",
@@ -22,6 +22,6 @@ export default LOCAL_DB_PATH
 			dbCredentials: {
 				databaseId: DB_ID!,
 				token: D1_TOKEN!,
-				accountId: CF_ACCOUNT_ID!,
-			},
+				accountId: CF_ACCOUNT_ID!
+			}
 		} satisfies Config);

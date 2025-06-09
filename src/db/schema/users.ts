@@ -11,7 +11,7 @@ import * as posts from "@custom/db/schema/posts";
 import * as comments from "@custom/db/schema/comments";
 // import * as userKeys from "./userKeys";
 // import * as userSessions from "./userSessions";
-import { isAdmin, isAdminOrEditor, isAdminOrUser, usersCanRegister } from "../config-helpers";
+import { isAdmin, isAdminOrUser, usersCanRegister } from "../config-helpers";
 import type { ApiConfig } from "../routes";
 import { hashString } from "@services/cyrpt";
 import { sendEmailConfirmation } from "@services/auth";
