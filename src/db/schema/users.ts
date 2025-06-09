@@ -3,8 +3,9 @@ import {
   text,
   uniqueIndex,
   integer,
+  type AnySQLiteColumn,
 } from "drizzle-orm/sqlite-core";
-import { relations, type InferSelectModel } from "drizzle-orm";
+import { relations, SQL, sql, type InferSelectModel } from "drizzle-orm";
 import { auditSchema } from "./audit";
 import * as posts from "@custom/db/schema/posts";
 import * as comments from "@custom/db/schema/comments";
@@ -36,6 +37,11 @@ export const definition = {
   role: text("role").$type<"admin" | "user">().default("user"),
 };
 
+// custom lower function
+export function lower(email: AnySQLiteColumn): SQL {
+  return sql`lower(${email})`;
+}
+
 export const table = sqliteTable(
   tableName,
   {
@@ -44,7 +50,7 @@ export const table = sqliteTable(
   },
   (table) => {
     return {
-      emailIndex: uniqueIndex("email_idx").on(table.email),
+      emailIndex: uniqueIndex("email_idx").on(lower(table.email)),
     };
   }
 );
@@ -125,6 +131,9 @@ export const hooks: ApiConfig["hooks"] = {
       if (data && data.password) {
         data.password = await hashString(data.password);
       }
+      if (data && data.email) {
+        data.email = data.email.toLowerCase();
+      }
       if (context.locals.user?.id) {
         data.userId = context.locals.user.id;
       }
@@ -133,6 +142,9 @@ export const hooks: ApiConfig["hooks"] = {
     update: (context, id, data) => {
       if (context.locals.user?.id) {
         data.userId = context.locals.user.id;
+      }
+      if (data && data.email) {
+        data.email = data.email.toLowerCase();
       }
       return data;
     },

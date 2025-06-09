@@ -10,9 +10,11 @@ export const GET = async (context) => {
 
   const email = decodeURIComponent(emailEncoded);
 
-  const otp = generateOTPPassword(context.locals.runtime.env.ONE_TIME_PASSWORD_CHARACTER_LENGTH ?? 8);
+  const otp = generateOTPPassword(
+    context.locals.runtime.env.ONE_TIME_PASSWORD_CHARACTER_LENGTH ?? 8
+  );
 
-  const user = await getUserFromEmail(email, context);
+  const user = await getUserFromEmail(context.locals.runtime.env.D1, email);
 
   if (!user) {
     return return404();
@@ -20,7 +22,9 @@ export const GET = async (context) => {
 
   const now = new Date();
 
-  const expiresOn = now.getTime() + context.locals.runtime.env.ONE_TIME_PASSWORD_EXPIRATION_TIME;
+  const expiresOn =
+    now.getTime() +
+    context.locals.runtime.env.ONE_TIME_PASSWORD_EXPIRATION_TIME;
   const expirationTime = formatMilliseconds(expiresOn - now.getTime());
 
   const updated = await updateRecord(

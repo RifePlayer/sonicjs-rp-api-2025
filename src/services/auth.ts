@@ -5,7 +5,7 @@ import {
 } from "./sessions";
 import { eq, like } from "drizzle-orm";
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
-import { table as userTable } from "@schema/users";
+import { lower, table as userTable } from "@schema/users";
 import { compareStringToHash } from "./cyrpt";
 import { getRecords, updateRecord } from "./data";
 import { sendEmailConfirmationEmail } from "./email";
@@ -106,10 +106,20 @@ export const getLoginTokenAndSession = async (userId: string, context: any) => {
   return { token, session };
 };
 
-export const getUserFromEmail = async (email: string, context: any) => {
-  const db = drizzle(context.locals.runtime.env.D1);
-  const user = await db.select().from(userTable).where(like(userTable.email, `%${email}%`)); 
-  return user[0] ?? null;
+export const getUserFromEmail = async (d1, email: string) => {
+  try {
+    const db = drizzle(d1);
+
+    const record = await db
+      .select()
+      .from(userTable)
+      .where(eq(lower(userTable.email), email.toLowerCase()));
+    const user = record[0];
+    return user ?? null;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 export const doesEmailExist = async (
@@ -120,10 +130,7 @@ export const doesEmailExist = async (
 
   let record;
   try {
-    record = await db
-      .select()
-      .from(userTable)
-      .where(eq(userTable.email, email));
+    record = await getUserFromEmail(d1, email);
   } catch (error) {
     throw error;
   }
@@ -165,14 +172,11 @@ export const sendEmailConfirmation = async (context, email: string) => {
 
   const emailConfirmationToken = generateRandomString(64);
 
-  const userRecord = await db
-    .select()
-    .from(userTable)
-    .where(eq(userTable.email, email));
-  if (userRecord.length === 0) {
+  const userRecord = await getUserFromEmail(context.locals.runtime.env.D1, email);
+  if (!userRecord) {
     return { error: "User not found" };
   }
-  let user = userRecord[0];
+  let user = userRecord;
   //user should not exist
   if (user && user.emailConfirmedOn) {
     return { error: "User already confirmed" };

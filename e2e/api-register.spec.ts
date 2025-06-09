@@ -2,7 +2,7 @@ import test, { expect } from "@playwright/test";
 import { cleanup, loginAsAdmin, updateEnvVar } from "./e2e-helpers";
 
 var token = "";
-const e2ePrefix = "e2e!!-register";
+const e2ePrefix = "e2e-register";
 test.describe("Register API Tests", () => {
   test.describe.configure({ mode: "serial" });
 
@@ -217,7 +217,7 @@ test.describe("Register API Tests", () => {
     const response2 = await request.post(`/api/v1/users`, {
       data: {
         data: {
-          email: `${e2ePrefix}-duplicate@test.com`,
+          email: `${e2ePrefix}-DUPLICATE@test.com`,
           password: "newpassword123abc",
           firstName: "Demo",
           lastName: "User",

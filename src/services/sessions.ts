@@ -2,7 +2,7 @@ import type { User } from "@schema/users";
 import { table as userSessions } from "@schema/userSessions";
 import type { Session } from "@schema/userSessions";
 
-import { eq } from "drizzle-orm";
+import { eq, like } from "drizzle-orm";
 import {
   encodeBase32LowerCaseNoPadding,
   encodeHexLowerCase,
