@@ -29,6 +29,15 @@ export const return400 = (message = "Unauthorized") => {
   );
 };
 
+export const return409 = (message = "Conflict") => {
+  return new Response(
+    JSON.stringify({
+      message,
+    }),
+    { headers: commonHeaders, status: 409 }
+  );
+};
+
 export const return401 = (message = "Unauthorized") => {
   return new Response(
     JSON.stringify({

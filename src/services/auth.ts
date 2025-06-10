@@ -6,11 +6,64 @@ import {
 import { eq, like } from "drizzle-orm";
 import { drizzle, type DrizzleD1Database } from "drizzle-orm/d1";
 import { lower, table as userTable } from "@schema/users";
-import { compareStringToHash } from "./cyrpt";
-import { getRecords, updateRecord } from "./data";
+import { compareStringToHash, hashString } from "./cyrpt";
+import { getRecords, insertRecord, updateRecord } from "./data";
 import { sendEmailConfirmationEmail } from "./email";
 import { generateRandomString } from "./utils";
-import { return404 } from "./return-types";
+import { return201, return404, return500 } from "./return-types";
+
+export const register = async (
+  d1,
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  otp: string,
+  context: any
+): Promise<object> => {
+  const db = drizzle(d1);
+
+  const lowerEmail = email?.toLowerCase();
+
+  // Check if user already exists
+  const existingUser = await getUserFromEmail(d1, lowerEmail);
+
+  if (existingUser && existingUser.email?.length > 0) {
+    return { error: "User already exists", status: 409 };
+  }
+
+  // Create new user
+  const userId = crypto.randomUUID();
+  const hashedPassword = await hashString(password);
+  
+  const newUser = {
+    id: userId,
+    firstName,
+    lastName,
+    email: lowerEmail,
+    password: hashedPassword,
+    role: "user",
+    createdOn: Date.now(),
+    updatedOn: Date.now()
+  };
+
+  const record = await insertRecord(d1, {}, {
+    table: "users",
+    data: newUser
+  });
+
+  // Send confirmation email if required
+  if (context.locals.runtime.env.REQUIRE_EMAIL_CONFIRMATION?.toString().toLowerCase() === "true") {
+    const confirmationCode = generateRandomString(32);
+    await db.update(userTable)
+      .set({ emailConfirmationToken: confirmationCode })
+      .where(eq(userTable.id, userId));
+      
+    await sendEmailConfirmationEmail(context, newUser, confirmationCode);
+  }
+
+  return record;
+}
 
 export const login = async (
   d1,
@@ -110,10 +163,8 @@ export const getUserFromEmail = async (d1, email: string) => {
   try {
     const db = drizzle(d1);
 
-    const record = await db
-      .select()
-      .from(userTable)
-      .where(eq(lower(userTable.email), email.toLowerCase()));
+    const record = await db.select().from(userTable).where(eq(userTable.email, email.toLowerCase())); 
+      
     const user = record[0];
     return user ?? null;
   } catch (error) {
@@ -134,7 +185,7 @@ export const doesEmailExist = async (
   } catch (error) {
     throw error;
   }
-  const user = record[0];
+  const user = record;
 
   if (!user) {
     return { exists: false, confirmed: false };
@@ -196,7 +247,7 @@ export const sendEmailConfirmation = async (context, email: string) => {
 
     return await sendEmailConfirmationEmail(
       context,
-      cleanUser(user),
+      user,
       emailConfirmationToken
     );
   }

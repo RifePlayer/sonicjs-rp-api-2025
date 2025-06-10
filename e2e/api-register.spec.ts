@@ -77,7 +77,7 @@ test.describe("Register API Tests", () => {
       "https://sonicjs.com"
     );
 
-    const response = await request.post(`/api/v1/users`, {
+    const response = await request.post(`/api/v1/auth/register`, {
       data: {
         data: {
           email: `${e2ePrefix}-with-confirmation@test.com`,
@@ -137,7 +137,7 @@ test.describe("Register API Tests", () => {
     );
     await updateEnvVar(request, "AUTO_LOGIN_AFTER_EMAIL_CONFIRMATION", "true");
 
-    const response = await request.post(`/api/v1/users`, {
+    const response = await request.post(`/api/v1/auth/register`, {
       data: {
         data: {
           email: `${e2ePrefix}-with-confirmation-and-auto-login@test.com`,
@@ -198,7 +198,7 @@ test.describe("Register API Tests", () => {
     await updateEnvVar(request, "USERS_CAN_REGISTER", "true");
     await updateEnvVar(request, "REQUIRE_EMAIL_CONFIRMATION", "false");
 
-    const response = await request.post(`/api/v1/users`, {
+    const response = await request.post(`/api/v1/auth/register`, {
       data: {
         data: {
           email: `${e2ePrefix}-duplicate@test.com`,
@@ -214,7 +214,7 @@ test.describe("Register API Tests", () => {
     expect(data.id).toEqual(expect.any(String));
 
     // second request with same email should fail
-    const response2 = await request.post(`/api/v1/users`, {
+    const response2 = await request.post(`/api/v1/auth/register`, {
       data: {
         data: {
           email: `${e2ePrefix}-DUPLICATE@test.com`,
@@ -224,10 +224,10 @@ test.describe("Register API Tests", () => {
         },
       },
     });
-    expect(response2.status()).toBe(500);
+    expect(response2.status()).toBe(409);
     const { message } = await response2.json();
 
-    expect(message.toLowerCase()).toContain("unique");
+    expect(message.toLowerCase()).toContain("conflict");
   });
 
   test.afterEach(async ({ request }) => {

@@ -2,6 +2,8 @@
 //   npx wrangler d1 execute sonicjs --file ./src/custom/db/migrate/import.sql
 
 //   wrangler d1 execute sonicjs --local --file ./src/custom/import.sql
+// npx wrangler d1 execute sonicjs --command="SELECT * FROM users limit 5"
+
 
 import { readFileSync } from 'fs';
 const programs = JSON.parse(readFileSync('./src/custom/db/migrate/rife-data.json'));

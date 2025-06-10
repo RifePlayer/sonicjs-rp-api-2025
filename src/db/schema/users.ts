@@ -9,12 +9,9 @@ import { relations, SQL, sql, type InferSelectModel } from "drizzle-orm";
 import { auditSchema } from "./audit";
 import * as posts from "@custom/db/schema/posts";
 import * as comments from "@custom/db/schema/comments";
-// import * as userKeys from "./userKeys";
-// import * as userSessions from "./userSessions";
 import { isAdmin, isAdminOrUser, usersCanRegister } from "../config-helpers";
 import type { ApiConfig } from "../routes";
 import { hashString } from "@services/cyrpt";
-import { sendEmailConfirmation } from "@services/auth";
 export const tableName = "users";
 export const name = "Users";
 
@@ -107,47 +104,47 @@ export const userRegistrationAfterOperation = (
   data,
   result
 ) => {
-  removePassword(context, operation, id, data, result);
-  addEmailToken(context, operation, id, data, result);
+  // removePassword(context, operation, id, data, result);
+  // addEmailToken(context, operation, id, data, result);
 };
 
-export const addEmailToken = (context, operation, id, data, result) => {
-  if (operation === "create" && result.status === 201) {
-    if (result.data.email && context.locals.runtime.env.REQUIRE_EMAIL_CONFIRMATION?.toString().toLowerCase() === "true") {
-      sendEmailConfirmation(context, result.data.email);
-    }
-  }
-};
+// export const addEmailToken = (context, operation, id, data, result) => {
+//   if (operation === "create" && result.status === 201) {
+//     if (result.data.email && context.locals.runtime.env.REQUIRE_EMAIL_CONFIRMATION?.toString().toLowerCase() === "true") {
+//       sendEmailConfirmation(context, result.data.email);
+//     }
+//   }
+// };
 
-export const removePassword = (context, operation, id, data, result) => {
-  if (operation === "create" && result.status === 201) {
-    delete result.data.password;
-  }
-};
+// export const removePassword = (context, operation, id, data, result) => {
+//   if (operation === "create" && result.status === 201) {
+//     delete result.data.password;
+//   }
+// };
 
 export const hooks: ApiConfig["hooks"] = {
   resolveInput: {
-    create: async (context, data) => {
-      if (data && data.password) {
-        data.password = await hashString(data.password);
-      }
-      if (data && data.email) {
-        data.email = data.email.toLowerCase();
-      }
-      if (context.locals.user?.id) {
-        data.userId = context.locals.user.id;
-      }
-      return data;
-    },
-    update: (context, id, data) => {
-      if (context.locals.user?.id) {
-        data.userId = context.locals.user.id;
-      }
-      if (data && data.email) {
-        data.email = data.email.toLowerCase();
-      }
-      return data;
-    },
+    // create: async (context, data) => {
+    //   if (data && data.password) {
+    //     data.password = await hashString(data.password);
+    //   }
+    //   if (data && data.email) {
+    //     data.email = data.email.toLowerCase();
+    //   }
+    //   if (context.locals.user?.id) {
+    //     data.userId = context.locals.user.id;
+    //   }
+    //   return data;
+    // },
+    // update: (context, id, data) => {
+    //   if (context.locals.user?.id) {
+    //     data.userId = context.locals.user.id;
+    //   }
+    //   if (data && data.email) {
+    //     data.email = data.email.toLowerCase();
+    //   }
+    //   return data;
+    // },
   },
   afterOperation: userRegistrationAfterOperation,
 };
