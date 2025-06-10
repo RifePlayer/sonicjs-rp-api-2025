@@ -16,10 +16,12 @@ export const POST: APIRoute = async (context) => {
   const contentType = context.request.headers.get("content-type");
   if (contentType === "application/json") {
     // Get the body of the request
-    const body: { email: string; password: string; firstName: string; lastName: string } = await context.request.json();
+    const body: {
+      data: { email: any; password: any; firstName: any; lastName: any; }; email: string; password: string; firstName: string; lastName: string 
+} = await context.request.json();
     const { email, password, firstName, lastName } = body?.data;
 
-    const registerResult = await register(
+    const registerResult: any = await register(
       context.locals.runtime.env.D1,
       firstName,
       lastName,
