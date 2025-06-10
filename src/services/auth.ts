@@ -53,14 +53,14 @@ export const register = async (
   });
 
   // Send confirmation email if required
-  if (context.locals.runtime.env.REQUIRE_EMAIL_CONFIRMATION?.toString().toLowerCase() === "true") {
-    const confirmationCode = generateRandomString(32);
-    await db.update(userTable)
-      .set({ emailConfirmationToken: confirmationCode })
-      .where(eq(userTable.id, userId));
+  // if (context.locals.runtime.env.REQUIRE_EMAIL_CONFIRMATION?.toString().toLowerCase() === "true") {
+  //   const confirmationCode = generateRandomString(32);
+  //   await db.update(userTable)
+  //     .set({ emailConfirmationToken: confirmationCode })
+  //     .where(eq(userTable.id, userId));
       
-    await sendEmailConfirmationEmail(context, newUser, confirmationCode);
-  }
+  //   await sendEmailConfirmationEmail(context, newUser, confirmationCode);
+  // }
 
   return record;
 }
