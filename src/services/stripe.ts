@@ -13,7 +13,7 @@ const stripeWebHookPost = async (context) => {
   const { STRIPE_SECRET_API_KEY, STRIPE_WEBHOOK_SECRET } =
     context.locals.runtime.env;
   const stripe = new Stripe(STRIPE_SECRET_API_KEY, {
-    apiVersion: "2023-10-16",
+    apiVersion: "2025-05-28.basil" as const,
   });
   const signature = context.request.headers.get("stripe-signature");
 
@@ -30,62 +30,6 @@ const stripeWebHookPost = async (context) => {
     );
 
     switch (event.type) {
-      case "customer.subscription.updated": {
-        const subscription = event.data.object;
-        const customerId = subscription.customer;
-        const currentPlan = subscription.items.data[0].plan.id;
-        const customerEmail = subscription.customer_email;
-
-        try {
-          // Get user by email
-          const d1 = context.locals.runtime.env.D1;
-          const user = await getUserFromEmail(d1, customerEmail);
-
-          if (!user) {
-            log(context, {
-              message: `User not found for email: ${customerEmail}`,
-            });
-            return;
-          }
-
-          // Update user profile with new plan information
-          await updateRecord(
-            d1,
-            {},
-            {
-              id: user.id,
-              table: "users",
-              data: {
-                profile: {
-                  plan: currentPlan,
-                  subscription: {
-                    status: subscription.status,
-                    current_period_end: subscription.current_period_end,
-                    cancel_at_period_end: subscription.cancel_at_period_end,
-                  },
-                },
-              },
-            },
-            {}
-          );
-
-          log(context, {
-            message: `Updated subscription for user: ${user.id}`,
-            plan: currentPlan,
-            status: subscription.status,
-          });
-        } catch (err) {
-          const errorMessage = `⚠️  Error updating subscription for user: ${err.message}`;
-          console.error(errorMessage);
-        }
-
-        log(context, {
-          message: `Updated subscription for customer: ${customerId}`,
-          plan: currentPlan,
-          status: subscription.status,
-        });
-        break;
-      }
       case "invoice.paid": {
         const invoice = event.data.object;
         log(context, {
