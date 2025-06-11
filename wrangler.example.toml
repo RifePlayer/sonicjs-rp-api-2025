@@ -44,5 +44,9 @@ EMAIL_CONFIRMATION_SUBJECT = "Your SonicJS Email Confirmation"
 EMAIL_CONFIRMATION_REDIRECT_URL = "https://sonicjs.com/login" # after user clicks confirmation link, they will be redirected to this url
 AUTO_LOGIN_AFTER_EMAIL_CONFIRMATION = true
 
+# stripe settings
+STRIPE_SECRET_API_KEY = "CHANGEME"
+STRIPE_WEBHOOK_SECRET = "CHANGEME"
+
 # testing
 TESTING_MODE = true # do not set to true in production, it enables e2e endpoints
