@@ -9,7 +9,6 @@ export async function log(ctx, data) {
     return;
   }
 
-  console.log(data.message);
 
   const datadog_apikey = ctx.locals.runtime.env.DATADOG_API_KEY;
 
