@@ -22,3 +22,8 @@ export const button = {
     padding: '30px',
     margin: '30px 0',
   };
+
+  const hr = {
+    borderColor: '#e6ebf1',
+    margin: '20px 0',
+  };

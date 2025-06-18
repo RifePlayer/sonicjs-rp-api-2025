@@ -4,8 +4,7 @@ import {
   Text,
 } from '@react-email/components';
 import { EmailLayout } from './components/EmailLayout';
-import { button } from './styles';
-import { paragraph } from './styles';
+import { button, paragraph, hr } from './styles';
 
 export const ContactConfirmationEmail = (contact) => (
   <EmailLayout preview="Thank you for contacting us" baseUrl={contact.baseUrl}>
@@ -40,8 +39,9 @@ export const ContactConfirmationEmail = (contact) => (
     <Text style={paragraph}>
       {contact.message}
     </Text>
+    <hr style={hr} />
     <Text style={paragraph}>
-      We typically respond within 24-48 hours during business days. If you have any urgent questions, please don't hesitate to reach out again.
+      We typically respond within a few hours during business hours (9am-5pm PST) Monday through Friday.
     </Text>
     <Text style={paragraph}>— The RifePlayer Team</Text>
   </EmailLayout>
