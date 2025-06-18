@@ -3,6 +3,7 @@ import { relations } from 'drizzle-orm';
 import { auditSchema } from '@schema/audit';
 import { isAdmin } from 'db/config-helpers';
 import type { ApiConfig } from 'db/routes';
+import { sendContactConfirmationEmail, sendContactAdminNotificationEmail } from '@services/email';
 
 export const tableName = 'contacts';
 
@@ -39,5 +40,29 @@ export const access: ApiConfig['access'] = {
 export const fields: ApiConfig['fields'] = {
   message: {
     type: 'ckeditor'
+  }
+};
+
+export const hooks: ApiConfig['hooks'] = {
+  afterOperation: async (context, operation, id, data, result) => {
+    if (operation === 'create' && result?.data) {
+      const contact = result.data;
+      
+      try {
+        // Send confirmation email to the user
+        await sendContactConfirmationEmail(context, contact);
+        console.log('Contact confirmation email sent to:', contact.email);
+      } catch (error) {
+        console.error('Failed to send contact confirmation email:', error);
+      }
+      
+      try {
+        // Send notification email to admin
+        await sendContactAdminNotificationEmail(context, contact);
+        console.log('Contact admin notification email sent');
+      } catch (error) {
+        console.error('Failed to send contact admin notification email:', error);
+      }
+    }
   }
 };

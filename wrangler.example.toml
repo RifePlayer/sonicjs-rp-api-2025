@@ -33,6 +33,7 @@ EMAIL_FROM="me@example.com"
 EMAIL_BASE_URL="https://example.com"
 EMAIL_FROM_NAME="Example"
 EMAIL_SEND_WELCOME_EMAIL = true
+ADMIN_EMAIL="admin@example.com"
 
 # one time password settings
 ONE_TIME_PASSWORD_CHARACTER_LENGTH = 5

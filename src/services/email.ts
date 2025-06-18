@@ -1,6 +1,8 @@
 import ConfirmationEmail from "@emails/confirmation";
 import OTPEmail from "@emails/otp";
 import PasswordResetEmail from "@emails/reset";
+import ContactConfirmationEmail from "@emails/contact-confirmation";
+import ContactAdminNotificationEmail from "@emails/contact-admin-notification";
 import React from "react";
 import { Resend } from "resend";
 
@@ -91,6 +93,39 @@ export async function sendEmailConfirmationEmail(context, user, code) {
     to: user.email,
     subject: context.locals.runtime.env.EMAIL_CONFIRMATION_SUBJECT,
     react: ConfirmationEmail(user, code, baseUrl, appUrl),
+  });
+  return result;
+}
+
+export async function sendContactConfirmationEmail(context, contact) {
+  const resend = getResendClient(context);
+  const baseUrl = context.locals.runtime.env.EMAIL_BASE_URL;
+  
+  const result = await resend.emails.send({
+    from: context.locals.runtime.env.EMAIL_FROM,
+    to: contact.email,
+    subject: "Thank you for contacting us - RifePlayer",
+    react: ContactConfirmationEmail({
+      ...contact,
+      baseUrl
+    }),
+  });
+  return result;
+}
+
+export async function sendContactAdminNotificationEmail(context, contact) {
+  const resend = getResendClient(context);
+  const baseUrl = context.locals.runtime.env.EMAIL_BASE_URL;
+  const adminEmail = context.locals.runtime.env.ADMIN_EMAIL || context.locals.runtime.env.EMAIL_FROM;
+  
+  const result = await resend.emails.send({
+    from: context.locals.runtime.env.EMAIL_FROM,
+    to: adminEmail,
+    subject: "New Contact Form Submission - RifePlayer",
+    react: ContactAdminNotificationEmail({
+      ...contact,
+      baseUrl
+    }),
   });
   return result;
 }
