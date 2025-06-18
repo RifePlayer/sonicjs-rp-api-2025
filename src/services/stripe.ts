@@ -2,14 +2,15 @@ import Stripe from "stripe";
 import { getRecords, updateRecord } from "./data";
 import { getUserFromEmail } from "./auth";
 import { return200, return500 } from "./return-types";
+import { log } from "./logger";
 
-// Add simple log function if not available
-const log = (context, message) => {
-  console.log("[STRIPE WEBHOOK]", message);
-};
 
 // Stripe webhook handler
 const stripeWebHookPost = async (context) => {
+  log(context, {
+    message: `Stripe webhook received`,
+  });
+
   const { STRIPE_SECRET_API_KEY, STRIPE_WEBHOOK_SECRET } =
     context.locals.runtime.env;
   const stripe = new Stripe(STRIPE_SECRET_API_KEY, {
@@ -64,7 +65,7 @@ const stripeWebHookPost = async (context) => {
           {}
         );
         log(context, {
-          message: `Customer updated: ${customer.id}`,
+          message: `stripe customer updated: ${customer.id}`,
           email,
         });
         break;
@@ -91,13 +92,16 @@ const stripeWebHookPost = async (context) => {
 
         if (!userRecord.data || !userRecord.data.length) {
           log(context, {
-            message: `User not found for customer id: ${customerId}`,
+            message: `stripe user not found for customer id: ${customerId}`,
           });
           return;
         }
 
         const user = userRecord.data[0];
-        console.log("user-->", user);
+        log(context, {
+          message: `stripe user found for customer id: ${customerId}`,
+          user,
+        });
 
         const profile = JSON.parse(user.profile);
         profile.plan = plan;
@@ -115,22 +119,22 @@ const stripeWebHookPost = async (context) => {
           {}
         );
         log(context, {
-          message: `New subscription created for customer: ${subscription.customer}`,
+          message: `stripe new subscription created for customer: ${subscription.customer}`,
           plan: plan,
         });
         break;
       }
       default:
-        log(context, { message: `Unhandled event type: ${event.type}` });
+        log(context, { message: `stripe unhandled event type: ${event.type}` });
         break;
     }
 
     return return200();
   } catch (err) {
-    const errorMessage = `⚠️  Webhook signature verification failed. ${
+    const errorMessage = `⚠️  stripe webhook signature verification failed. ${
       err instanceof Error ? err.message : "Internal server error"
     }`;
-    console.error(errorMessage);
+    log(context, { message: errorMessage });
     return return500(errorMessage);
   }
 };

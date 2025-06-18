@@ -1,24 +1,23 @@
 export async function log(ctx, data) {
-  if (!ctx || !ctx.env) {
+  if (!ctx) {
     //testinng hack
     return;
   }
 
-  const disableLogging = ctx.env.disable_logging === 'true';
-  if (disableLogging) {
+  const enableLogging = ctx.locals.runtime.env.DATADOG_ENABLED_LOGGING.toString().toLowerCase() === 'true';
+  if (!enableLogging) {
     return;
   }
 
   console.log(data.message);
 
-  const datadog_apikey =
-    ctx && ctx.env && ctx.env.datadog_apikey ? ctx.env.datadog_apikey : null;
+  const datadog_apikey = ctx.locals.runtime.env.DATADOG_API_KEY;
 
   if (datadog_apikey) {
     let dd_logsEndpoint =
       'https://http-intake.logs.datadoghq.com/v1/input/' + datadog_apikey;
 
-    let datadog_service = ctx.env.datadog_service;
+    let datadog_service = ctx.locals.runtime.env.DATADOG_SERVICE;
 
     // let hostname = request.headers.get('host') || ''
 

@@ -1,5 +1,6 @@
 import { getD1DataByTable } from "@services/d1-data";
 import { kvGetAll } from "@services/kv";
+import { log } from "@services/logger";
 import { return200 } from "@services/return-types";
 
 export const GET = async (context) => {
@@ -90,6 +91,8 @@ const getStatus = async (context) => {
   } catch (error) {
     status.d1 = "error: " + error;
   }
+
+  log(context, { message: "status", data: { status: "ok" } });
 
   return status;
 };
