@@ -23,7 +23,7 @@ export const button = {
     margin: '30px 0',
   };
 
-  const hr = {
+  export const hr = {
     borderColor: '#e6ebf1',
     margin: '20px 0',
   };
